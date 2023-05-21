@@ -1,0 +1,48 @@
+#version de nuestra app
+version: "3.9"
+
+#Los contenedores que vamos a crear
+services:
+
+	chanchito:
+
+    # 1-Modificar buil
+		build:
+      #nueva propiedad
+      #Indica a este archivo de docker donde se encuentra la aplicacion o el contexto en el cual el va a estar trabajando
+      #2-Indicamos . que es la ruta actual donde se encuentra el archivo de docker-compose-dev
+      context: .
+
+      #3-Ahora lo que tenemos que hacer es indicarle que esta imagen de chanchito la construya pero utilizando el archivo de Dockerfile.dev 
+      dockerfile: Dockerfile.dev      
+		ports:
+      - "3000:3000"
+    links:
+      - monguito
+      #4- El ultimo paso es indicarle a nuestro contenedor de chanchito que utilice un volume
+      volumes:
+        #vamos a ver los volumenes anonimos
+        #Indicamos que la ruta actual es la que tiene que ser montada volume con . y luego indicar la ruta de destino dentro del contenedor
+        - .:/home/app
+
+
+	monguito:
+
+    image: mongo
+    ports:
+      - "270217:270217"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:
+
+        - mongo-data:/data/db
+volumes:
+  mongo-data:
+  otro-volumen:
+
+
+#Comando docker para probar el nuevo archivo docker-dev
+# docker compose -f docker-compose-dev.yml up
+# "f" es la bandera para indicar un archivo docker-compose customizado que no sea  docker-compose.yml

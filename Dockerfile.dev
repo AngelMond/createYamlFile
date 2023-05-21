@@ -1,0 +1,27 @@
+#Archivo para configurar el ambiente de desarrollo
+
+# Este archivo se modifica en base al archivo que ya habiamos creado
+#Ejemplo de configuracion
+FROM node
+
+#Agregamos nuevo comando para instalar nodemon
+RUN npm i -g nodemon
+RUN mkdir  -p /home/app
+
+#Indicamos a nuestro archivo docker la ruta en la cual vamos a estar trabajando
+WORKDIR /home/app
+
+
+#Ya no necesitamos esta linea porque como vamos a trabajar con un volume este se encarga de colocar un enlace simbolico 
+# en la ruta de /home/app ya no la necesitamos
+#COPY . /home/app
+
+EXPOSE 3000
+
+#Ya no necesitamos indicar la ruta /home/app/, asi que lo removemos y cambiamos node por nodemon
+#CMD ["node", "/home/app/index.js"]
+
+CMD ["nodemon", "index.js"]
+
+
+#Ahora vamos a agregar otro archivo llamado Docker compose
