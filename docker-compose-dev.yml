@@ -6,7 +6,7 @@ services:
 
 	chanchito:
 
-    # 1-Modificar buil
+    # 1-Modificar build
 		build:
       #nueva propiedad
       #Indica a este archivo de docker donde se encuentra la aplicacion o el contexto en el cual el va a estar trabajando
