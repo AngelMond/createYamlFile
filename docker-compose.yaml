@@ -1,36 +1,63 @@
-//version de nuestra app
+#version de nuestra app
 version: "3.9"
 
-//Los contenedores que vamos a crear
+#Los contenedores que vamos a crear
 services:
 
-	//Mi primer contenerdor se va a llamar chanchito
-	//le vamos a especificar como se tiene que construir, los puertos a utilizar y si va a utilizar otro contenedor dentro de este mismo archivo .yaml
+  #Los contenedores dentro de este archivo Docker automaticamente va a crear una Network para relacionarlos 
+
+	#Mi primer contenerdor se va a llamar chanchito
+	#le vamos a especificar como se tiene que construir, los puertos a utilizar y si va a utilizar otro contenedor dentro de este mismo archivo .yaml
 	chanchito:
 
-		//Construye la imagen que se encuentra dentro de esta misma ruta, que es donde se encuentra el archivo Dockerfile
+		#Construye la imagen que se encuentra dentro de esta misma ruta, que es donde se encuentra el archivo Dockerfile
 		build: . 
 
-    //Puertos que queremos habilitar agregando un -. Podemos indicar que queremos mapear mas de un puerto
-    //El primer numero es el puerto de nuestra maquina o del SO anfitrón y el segundo es del puerto del contenedor
+    #Puertos que queremos habilitar agregando un -. Podemos indicar que queremos mapear mas de un puerto
+    #El primer numero es el puerto de nuestra maquina o del SO anfitrón y el segundo es del puerto del contenedor
 		ports:
       - "3000:3000"
 
-    //Indicamos el nombre del contenedor que queremos mapear para que utilice el servicio de chanchito
+    #Indicamos el nombre del contenedor que queremos mapear para que utilice el servicio de chanchito
     links:
       - monguito
 
-	//mi segundo contenedor se va a llamar monguito
+	#mi segundo contenedor se va a llamar monguito
 	monguito:
 
-    //Primero indicamos en base a que imagen vamos a crear este contenedor
+    #Primero indicamos en base a que imagen vamos a crear este contenedor
     image: mongo
 
-    //Numero de la izquierda es del SO anfitrion y el de la derecha el de nuestro contenedor
+    #Numero de la izquierda es del SO anfitrion y el de la derecha el de nuestro contenedor
     ports:
       - "270217:270217"
 
-    //Agregamos las variables de entorno
+    #Agregamos las variables de entorno
     environment:
       - MONGO_INITDB_ROOT_USERNAME=user
       - MONGO_INITDB_ROOT_PASSWORD=password
+
+    #Agregamos una nueva propiedad para los volumes
+    #Indica al contenedor monguito cuales son los volumes a utilizar. Es el nombre del volume que le pasamos a volumes
+    volumes:
+
+      #Vamos a agregar la ruta que se va a encontrar dentro del contenedor en donde va a ser montado el volumen de mongo-data
+      #En este caso la base de datos de mongo guarda sus datos en el siguiente directorio
+      - mongo-data:
+
+        #Si quisieramos agregar otro volume simplemente lo colocamos debajo de este
+        - mongo-data:/data/db
+
+        #ejemplo de otro volumen
+        #otro-volumen:/ruta/otro/volumen
+
+        #rutas de otras bases de datos
+        #mysql -> /var/lib/mysql
+        #postgres -> /var/lib/postgresql/data
+
+#Definimos todos los volumes que van a utilizar nuestros contenedores para la persistencia de datos
+volumes:
+  
+  #Asignamos un nombre al volumen
+  mongo-data:
+  otro-volumen:
